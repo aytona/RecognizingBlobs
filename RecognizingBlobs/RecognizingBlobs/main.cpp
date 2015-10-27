@@ -52,7 +52,9 @@ int main() {
 	cout << "Percentage of blob: ";
 	cin >> percentage;
 
+	BitArray visited(rows*cols);
 	cout << gridView(genGrid(rows, cols, percentage), rows, cols);
+	cout << blobCount(genGrid(rows, cols, percentage), visited, rows, cols);
 	system("PAUSE");
 	return 0;
 }
@@ -87,11 +89,25 @@ string gridView(BitArray &grid, unsigned int rows, unsigned int cols) {
 
 int blobCount(BitArray &grid, BitArray visited, unsigned int rows, unsigned int cols) {
 	int count = 0;
-
-
+	for (unsigned int i = 0; i < rows; i++) {
+		for (unsigned int j = 0; j < cols; j++) {
+			unsigned int current = i + j * cols;	// Current location
+			int top = current - cols;				// Top of current
+			int bottom = current + cols;			// Bottom of current
+			int left = current - 1;					// Left of current
+			int right = current + 1;				// Right of current
+			markBlob(grid, visited, rows, cols, i, j);
+			count++;
+		}
+	}
 	return count;
 }
 
 void markBlob(BitArray &grid, BitArray &visited, unsigned int rows, unsigned int cols, unsigned int row, unsigned int col) {
-
+	// Rows and Cols is the Size of the grid
+	// Row and Col is the current row and col
+	unsigned int current = row + col * cols;		// Current element (the start of the blob)
+	if (grid[current]) {
+		visited.SetBit(current);
+	}
 }
