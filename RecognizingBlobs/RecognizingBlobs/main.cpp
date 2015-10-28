@@ -53,9 +53,10 @@ int main() {
 	cin >> percentage;
 
 	BitArray visited(rows*cols);
+	visited.ClearAllBits();
 	cout << gridView(genGrid(rows, cols, percentage), rows, cols);
-	cout << blobCount(genGrid(rows, cols, percentage), visited, rows, cols);
-	system("PAUSE");
+	cout << "There are " << blobCount(genGrid(rows, cols, percentage), visited, rows, cols) << " blob(s) in the grid" << endl;
+	system("pause");
 	return 0;
 }
 
@@ -76,7 +77,7 @@ string gridView(BitArray &grid, unsigned int rows, unsigned int cols) {
 	string gridString;
 	for (unsigned int i = 0; i < rows; i++) {
 		for (unsigned int j = 0; j < cols; j++) {
-			unsigned int loc = i + j * cols;
+			unsigned int loc = j + i * rows;
 			if (grid[loc])
 				gridString += "x";
 			else
@@ -91,23 +92,30 @@ int blobCount(BitArray &grid, BitArray visited, unsigned int rows, unsigned int 
 	int count = 0;
 	for (unsigned int i = 0; i < rows; i++) {
 		for (unsigned int j = 0; j < cols; j++) {
-			unsigned int current = i + j * cols;	// Current location
-			int top = current - cols;				// Top of current
-			int bottom = current + cols;			// Bottom of current
-			int left = current - 1;					// Left of current
-			int right = current + 1;				// Right of current
-			markBlob(grid, visited, rows, cols, i, j);
-			count++;
+			unsigned int current = j + i * rows;
+			if (grid[current] && !visited[current]) {
+				count++;
+				markBlob(grid, visited, rows, cols, i, j);
+			}
 		}
 	}
 	return count;
 }
 
 void markBlob(BitArray &grid, BitArray &visited, unsigned int rows, unsigned int cols, unsigned int row, unsigned int col) {
-	// Rows and Cols is the Size of the grid
-	// Row and Col is the current row and col
-	unsigned int current = row + col * cols;		// Current element (the start of the blob)
-	if (grid[current]) {
-		visited.SetBit(current);
+	unsigned int current = col + row * rows;
+	if ((current + 1 < rows * cols) && (current + cols < rows * cols)) {
+		if (grid[current] && !visited[current]) {
+			visited.SetBit(current);
+			if (grid[current + 1] && !visited[current + 1]) {
+				visited.SetBit(current + 1);
+				markBlob(grid, visited, rows, cols, row++, col);
+			}
+			if (grid[current + cols] && !visited[current + cols]) {
+				visited.SetBit(current + cols);
+				markBlob(grid, visited, rows, cols, row, col++);
+			}
+		}
 	}
+	return;
 }
