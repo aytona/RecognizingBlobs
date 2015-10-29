@@ -52,18 +52,21 @@ int main() {
 	cout << "Percentage of blob: ";
 	cin >> percentage;
 
+	BitArray grid(genGrid(rows, cols, percentage));
 	BitArray visited(rows*cols);
-	cout << gridView(genGrid(rows, cols, percentage), rows, cols);
-	cout << "There are " << blobCount(genGrid(rows, cols, percentage), visited, rows, cols) << " blob(s) in the grid" << endl;
-	system("pause");
+	string gridString(gridView(grid, rows, cols));
+	int count(blobCount(grid, visited, rows, cols));
+
+	cout << gridString << endl;
+	cout << "There are " << count << " blob(s) in the grid" << endl;
+
 	return 0;
 }
 
 BitArray genGrid(unsigned int rows, unsigned int cols, unsigned int percentage) {
 	unsigned int size = rows*cols;
 	BitArray grid(size);
-	grid.ClearAllBits();
-	for (unsigned int i = 0; i < size; ++i) {
+	for (unsigned int i = 0; i < size; i++) {
 		unsigned int randomNum = rand() % 100 + 1;
 		if (randomNum < percentage)
 			grid.SetBit(i);
@@ -73,8 +76,8 @@ BitArray genGrid(unsigned int rows, unsigned int cols, unsigned int percentage) 
 
 string gridView(BitArray &grid, unsigned int rows, unsigned int cols) {
 	string gridString;
-	for (unsigned int i = 0; i < rows; ++i) {
-		for (unsigned int j = 0; j < cols; ++j) {
+	for (unsigned int i = 0; i < rows; i++) {
+		for (unsigned int j = 0; j < cols; j++) {
 			if (grid[j + (i * cols)])
 				gridString += "x";
 			else
