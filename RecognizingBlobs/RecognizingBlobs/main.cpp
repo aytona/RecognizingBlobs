@@ -112,15 +112,15 @@ void markBlob(BitArray &grid, BitArray &visited, unsigned int rows, unsigned int
 		visited.SetBit(current);
 		if (col + 1 < cols && right < size)
 			if (!visited[right] && grid[right])
-				markBlob(grid, visited, rows, cols, row, ++col);
+				markBlob(grid, visited, rows, cols, row, col + 1);
 		if (col - 1 >= 0 && left < size)
 			if (!visited[left] && grid[left])
-				markBlob(grid, visited, rows, cols, row, --col);
+				markBlob(grid, visited, rows, cols, row, col - 1);
 		if (row + 1 < rows && bottom < size)
 			if (!visited[bottom] && grid[bottom])
-				markBlob(grid, visited, rows, cols, ++row, col);
+				markBlob(grid, visited, rows, cols, row + 1, col);
 		if (row - 1 >= 0 && top < size)
 			if (!visited[top] && grid[top]) 
-				markBlob(grid, visited, rows, cols, --row, col);
+				markBlob(grid, visited, rows, cols, row - 1, col);
 	}
 }
