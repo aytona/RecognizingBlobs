@@ -53,13 +53,13 @@ int main() {
 	cin >> percentage;
 
 	BitArray grid(genGrid(rows, cols, percentage));
-	BitArray visited(rows*cols);
-	string gridString(gridView(grid, rows, cols));
-	int count(blobCount(grid, visited, rows, cols));
+	BitArray visited(rows * cols);
+	string gridString = gridView(grid, rows, cols);
+	int count = blobCount(grid, visited, rows, cols);
 
-	cout << gridString << endl;
+	cout << endl << gridString << endl;
 	cout << "There are " << count << " blob(s) in the grid" << endl;
-
+	system("pause");
 	return 0;
 }
 
@@ -90,26 +90,37 @@ string gridView(BitArray &grid, unsigned int rows, unsigned int cols) {
 
 int blobCount(BitArray &grid, BitArray visited, unsigned int rows, unsigned int cols) {
 	int count = 0;
-	visited.ClearAllBits();
 	for (unsigned int i = 0; i < rows; ++i) {
 		for (unsigned int j = 0; j < cols; ++j) {
-			if (grid[j + (i * cols)]) {
-				count++; 
-				/*markBlob(grid, visited, rows, cols, i, j);*/
+			if (grid[j + (i * cols)] && !visited[j + (i * cols)]) {
+				count++;
+				markBlob(grid, visited, rows, cols, i, j);
 			}
 		}
 	}
 	return count;
 }
 
-//void markBlob(BitArray &grid, BitArray &visited, unsigned int rows, unsigned int cols, unsigned int row, unsigned int col) {
-//	unsigned int current = col * rows + row;
-//	unsigned int left = current + 1;
-//	if (!visited[current] && grid[current]) {
-//		visited.SetBit(current);
-//		if (!visited[] && grid[]) {
-//
-//		}
-//	}
-//	return;
-//}
+void markBlob(BitArray &grid, BitArray &visited, unsigned int rows, unsigned int cols, unsigned int row, unsigned int col) {
+	unsigned int current = col + (row * cols);
+	unsigned int left = current - 1;
+	unsigned int right = current + 1;
+	unsigned int bottom = current + cols;
+	unsigned int top = current - cols;
+	unsigned int size = rows * cols;
+	if (grid[current]) {
+		visited.SetBit(current);
+		if (col + 1 < cols && right < size)
+			if (!visited[right] && grid[right])
+				markBlob(grid, visited, rows, cols, row, ++col);
+		if (col - 1 >= 0 && left < size)
+			if (!visited[left] && grid[left])
+				markBlob(grid, visited, rows, cols, row, --col);
+		if (row + 1 < rows && bottom < size)
+			if (!visited[bottom] && grid[bottom])
+				markBlob(grid, visited, rows, cols, ++row, col);
+		if (row - 1 >= 0 && top < size)
+			if (!visited[top] && grid[top]) 
+				markBlob(grid, visited, rows, cols, --row, col);
+	}
+}
