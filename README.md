@@ -7,5 +7,6 @@ A blob is defined as active bits grouped together.
 Bit arrays, and recursion practice. Assignment for Data Structures class.
 
 ### Installation
-* Clone to desktop
+* Fork repository
+* Clone in desktop
 * Open solution using Visual Studio (This project was created using VS2013)
