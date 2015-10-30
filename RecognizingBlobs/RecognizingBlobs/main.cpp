@@ -2,6 +2,7 @@
 #include <iostream>
 #include <string>
 #include <stdlib.h>
+#include <time.h>
 using namespace std;
 
 /* Create a function called genGrid with the following signature:
@@ -39,10 +40,11 @@ void markBlob(BitArray &grid, BitArray &visited, unsigned int rows, unsigned int
 rows and number of columns of a grid, and also for the percentage of the blobs,
 and then generate a grid, count the blobs, and show the grid and the count */
 int main() {
-	unsigned seed;
-	cout << "Enter seed: ";
-	cin >> seed;
-	srand(seed);
+	//unsigned seed;
+	//cout << "Enter seed: ";
+	//cin >> seed;
+	//srand(seed);
+	srand(time(NULL));
 
 	unsigned int rows, cols, percentage;
 	cout << "Number of Rows: ";
@@ -110,17 +112,17 @@ void markBlob(BitArray &grid, BitArray &visited, unsigned int rows, unsigned int
 	unsigned int size = rows * cols;
 	if (grid[current]) {
 		visited.SetBit(current);
-		if (col + 1 < cols && right < size)
-			if (!visited[right] && grid[right])
-				markBlob(grid, visited, rows, cols, row, col + 1);
-		if (col - 1 >= 0 && left < size)
-			if (!visited[left] && grid[left])
-				markBlob(grid, visited, rows, cols, row, col - 1);
 		if (row + 1 < rows && bottom < size)
 			if (!visited[bottom] && grid[bottom])
 				markBlob(grid, visited, rows, cols, row + 1, col);
-		if (row - 1 >= 0 && top < size)
-			if (!visited[top] && grid[top]) 
+		if (row - 1 > 0 && top < size)
+			if (!visited[top] && grid[top])
 				markBlob(grid, visited, rows, cols, row - 1, col);
+		if (col - 1 > 0 && left < size)
+			if (!visited[left] && grid[left])
+				markBlob(grid, visited, rows, cols, row, col - 1);
+		if (col + 1 < cols && right < size)
+			if (!visited[right] && grid[right])
+				markBlob(grid, visited, rows, cols, row, col + 1);
 	}
 }
